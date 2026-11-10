@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Life: Laugh, Cry & Keep Going</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at top left, #6845a5, transparent 40%),
+        linear-gradient(135deg, #10152f, #25204d, #102a43);
+    color: white;
+}
+
+/* ONE SINGLE CONTAINER */
+.main-box {
+    width: 90%;
+    max-width: 760px;
+    min-height: 400px;
+    margin: auto;
+    padding: 28px 25px;
+    border: 2px solid rgba(255, 215, 120, 0.8);
+    border-radius: 24px;
+    background: linear-gradient(145deg,
+        rgba(36, 43, 83, 0.97),
+        rgba(26, 30, 61, 0.98));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    animation: appear 1s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #ffd778;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #d5d8ee;
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+.music-button,
+.category-button,
+.action-button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.music-button {
+    background: #ffd778;
+    color: #25204d;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.music-button:hover {
+    background: white;
+    transform: scale(1.05);
+}
+
+.category-button {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 8px 15px;
+    margin: 4px;
+    border-radius: 25px;
+    font-size: 12px;
+}
+
+.category-button:hover,
+.category-button.active {
+    background: #ffd778;
+    color: #25204d;
+    border-color: #ffd778;
+}
+
+#storyType {
+    color: #ffd778;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: 22px;
+    margin-bottom: 8px;
+}
+
+h2 {
+    color: white;
+    font-size: 23px;
+    margin-bottom: 12px;
+}
+
+#storyText {
+    color: #e5e7f4;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 620px;
+    margin: 0 auto 20px;
+}
+
+.action-button {
+    background: linear-gradient(135deg, #ffd778, #f2a94a);
+    color: #25204d;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 12px;
+    margin: 5px;
+}
+
+.action-button:hover {
+    background: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+}
+
+footer {
+    color: #c5c9df;
+    font-size: 11px;
+    margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .main-box {
+        width: 100%;
+        padding: 22px 15px;
+    }
+
+    h1 {
+        font-size: 21px;
+    }
+
+    h2 {
+        font-size: 19px;
+    }
+
+    #storyText {
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-box">
+
+    <h1>✦ LIFE: LAUGH, CRY & KEEP GOING ✦</h1>
+
+    <p class="subtitle">
+        Every life has a story. Every story has a lesson.
+    </p>
+
+    <audio id="backgroundMusic" loop>
+        <source src="Romantic.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-button" onclick="toggleMusic()" id="musicButton">
+        ▶ Play Music
+    </button>
+
+    <div>
+        <button class="category-button active"
+        onclick="showCategory('all', this)">All Stories</button>
+
+        <button class="category-button"
+        onclick="showCategory('funny', this)">😂 Funny</button>
+
+        <button class="category-button"
+        onclick="showCategory('emotional', this)">💔 Emotional</button>
+
+        <button class="category-button"
+        onclick="showCategory('hope', this)">🌟 Hope</button>
+    </div>
+
+    <p id="storyType">LIFE STORY</p>
+
+    <h2 id="storyTitle">The Journey of Life</h2>
+
+    <p id="storyText">
+        Life is not always easy. Sometimes we laugh, sometimes we cry,
+        but every day gives us another reason to keep going.
+    </p>
+
+    <button class="action-button" onclick="nextStory()">
+        Next Story →
+    </button>
+
+    <button class="action-button" onclick="copyStory()">
+        📋 Copy Story
+    </button>
+
+    <footer>
+        ✨ © 2026 Life: Laugh, Cry & Keep Going. Your story matters. ✨
+    </footer>
+
+</div>
+
+<script>
+const stories = [
+    {
+        category: "funny",
+        type: "😂 FUNNY STORY",
+        title: "The Morning Alarm",
+        text: "I set five alarms to wake up early. Unfortunately, I woke up late and discovered that I had been turning them off in my sleep. Even my alarm clock has given up on me!"
+    },
+    {
+        category: "funny",
+        type: "😂 FUNNY STORY",
+        title: "The Empty Wallet",
+        text: "My wallet and I have a very strong relationship. We spend most of our time together being empty. Sometimes I open it just to check whether a miracle has happened!"
+    },
+    {
+        category: "funny",
+        type: "😂 FUNNY STORY",
+        title: "The Diet Plan",
+        text: "I promised myself I would start eating healthy. Then I saw a delicious cake. I decided that tomorrow was a better day to begin my healthy lifestyle."
+    },
+    {
+        category: "funny",
+        type: "😂 FUNNY STORY",
+        title: "The Smart Phone",
+        text: "My phone says I have low storage. My life says I have too many problems. At least my phone has the courage to tell me directly!"
+    },
+    {
+        category: "emotional",
+        type: "💔 EMOTIONAL STORY",
+        title: "Silent Sacrifices",
+        text: "Some people smile while carrying heavy burdens. They encourage others even when they need encouragement themselves. Never underestimate the strength of someone who keeps going quietly."
+    },
+    {
+        category: "emotional",
+        type: "💔 EMOTIONAL STORY",
+        title: "The Hidden Tears",
+        text: "Not every person who says 'I am fine' is truly fine. Some tears are hidden behind smiles, and some battles are fought silently. Be kind, because you never know what someone is facing."
+    },
+    {
+        category: "emotional",
+        type: "💔 EMOTIONAL STORY",
+        title: "A Mother's Love",
+        text: "A mother's love is often seen in the little things: the sacrifices, the sleepless nights, the prayers and the endless efforts to make life better for her children."
+    },
+    {
+        category: "emotional",
+        type: "💔 EMOTIONAL STORY",
+        title: "The Lonely Journey",
+        text: "Sometimes the journey feels lonely. People may not understand your struggles, but that does not mean your efforts are wasted. Keep believing in yourself."
+    },
+    {
+        category: "hope",
+        type: "🌟 HOPE & INSPIRATION",
+        title: "Tomorrow Is Another Day",
+        text: "Yesterday may have been difficult, and today may still be challenging. But tomorrow brings another opportunity to try again. Do not allow one bad day to define your whole life."
+    },
+    {
+        category: "hope",
+        type: "🌟 HOPE & INSPIRATION",
+        title: "Small Steps",
+        text: "You do not have to achieve everything today. Small steps taken consistently can lead to great achievements. Keep moving, even when progress feels slow."
+    },
+    {
+        category: "hope",
+        type: "🌟 HOPE & INSPIRATION",
+        title: "Believe in Yourself",
+        text: "There will be moments when nobody understands your dreams. Do not give up just because others cannot see what you see. Your journey is yours to complete."
+    },
+    {
+        category: "hope",
+        type: "🌟 HOPE & INSPIRATION",
+        title: "Stronger Than Yesterday",
+        text: "Every challenge teaches us something. Every disappointment can build wisdom. You may not be where you want to be yet, but you are not where you started."
+    },
+    {
+        category: "hope",
+        type: "🌟 HOPE & INSPIRATION",
+        title: "Keep Going",
+        text: "When life becomes difficult, pause, breathe and gather your strength. Rest if you must, but do not give up. Your story is still being written."
+    },
+    {
+        category: "emotional",
+        type: "💔 EMOTIONAL STORY",
+        title: "The Unseen Fighter",
+        text: "Some people wake up every morning and fight battles nobody knows about. They go to work, take care of others and keep smiling. Their courage deserves recognition."
+    }
+];
+
+let currentStories = stories;
+let currentIndex = 0;
+
+function displayStory() {
+    const story = currentStories[currentIndex];
+
+    document.getElementById("storyType").textContent = story.type;
+    document.getElementById("storyTitle").textContent = story.title;
+    document.getElementById("storyText").textContent = story.text;
+}
+
+function nextStory() {
+    currentIndex++;
+
+    if (currentIndex >= currentStories.length) {
+        currentIndex = 0;
+    }
+
+    displayStory();
+}
+
+function showCategory(category, button) {
+    document.querySelectorAll(".category-button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    currentStories = category === "all"
+        ? stories
+        : stories.filter(story => story.category === category);
+
+    currentIndex = 0;
+    displayStory();
+}
+
+function toggleMusic() {
+    const music = document.getElementById("backgroundMusic");
+    const button = document.getElementById("musicButton");
+
+    if (music.paused) {
+        music.play()
+            .then(() => button.textContent = "⏸ Pause Music")
+            .catch(() => alert("Please check that Romantic.mp3 is in the same folder as this HTML file."));
+    } else {
+        music.pause();
+        button.textContent = "▶ Play Music";
+    }
+}
+
+function copyStory() {
+    const title = document.getElementById("storyTitle").textContent;
+    const text = document.getElementById("storyText").textContent;
+
+    navigator.clipboard.writeText(title + "\n\n" + text)
+        .then(() => alert("Story copied successfully!"))
+        .catch(() => alert("Copying is not supported by this browser."));
+}
+
+displayStory();
+</script>
+
+</body>
+</html>
