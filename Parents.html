@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Episode 1 - The Day Our Parents Died</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #100c0c;
+    font-family: Georgia, serif;
+    color: white;
+}
+
+.story-box {
+    width: 100%;
+    max-width: 390px;
+    background: linear-gradient(145deg, #302222, #1d1515);
+    border: 10px double #bd9476;
+    border-radius: 22px;
+    padding: 13px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(181,138,112,0.4);
+}
+
+.episode {
+    color: #d9ae8d;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin: 5px 0;
+}
+
+h1 {
+    color: #f0c5a6;
+    font-size: 22px;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    margin: 5px 0 12px;
+    text-shadow: 2px 2px 4px black;
+}
+
+.story-image {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center 25%;
+    border: 3px solid #bd9476;
+    border-radius: 10px;
+    background: #100d0d;
+}
+
+#narration {
+    min-height: 155px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 8px;
+    font-size: 17px;
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+    color: #fff0e7;
+    text-align: center;
+    text-shadow: 1px 1px 2px black;
+}
+
+#narration p {
+    margin: 0;
+    animation: appear 0.7s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 8px 0;
+}
+
+button {
+    background: linear-gradient(145deg, #bd805d, #8d543b);
+    color: white;
+    border: 2px solid #e0b395;
+    border-radius: 9px;
+    padding: 11px 13px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    box-shadow: 0 3px 6px black;
+}
+
+button:hover {
+    background: #d19a78;
+    transform: scale(1.04);
+}
+
+.footer {
+    font-size: 12px;
+    font-style: italic;
+    color: #d7b9a8;
+    margin-top: 12px;
+    line-height: 1.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="story-box">
+
+    <div class="episode">A FAMILY STORY • EPISODE 1</div>
+
+    <h1>THE DAY OUR PARENTS DIED</h1>
+
+    <img src="Pain.png"
+         alt="The beginning of a painful family story"
+         class="story-image">
+
+    <div id="narration" aria-live="polite">
+        <p>Some days change your life forever. This was the day everything changed for us. Press Play to listen.</p>
+    </div>
+
+    <div class="controls">
+
+        <button onclick="playStory()">▶ Play</button>
+
+        <button onclick="pauseStory()">⏸ Pause</button>
+
+        <button onclick="restartStory()">↻ Restart</button>
+
+    </div>
+
+    <audio id="song" preload="auto">
+        <source src="Ninakuita.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="footer">
+        Some losses leave wounds that time cannot easily heal.
+    </div>
+
+</div>
+
+<script>
+
+const narration = document.getElementById("narration");
+const song = document.getElementById("song");
+
+const sentences = [
+
+"Some days change your life forever. For us, that day was the day we lost our parents.",
+
+"We were six children growing up in one home. We had dreams, laughter and a family we believed would always be together.",
+
+"Our parents were our protection. When we were hungry, they found food. When we were afraid, they gave us courage. When we cried, they comforted us.",
+
+"We never imagined that one day we would wake up and find that the two people who made our house a home would be gone.",
+
+"The news came like a terrible dream. We cried. We questioned God. We held on to one another because none of us knew what would happen next.",
+
+"Suddenly, the house that once felt warm became painfully quiet. Their voices were gone. Their footsteps were gone. Even the smallest things reminded us of them.",
+
+"We looked at their photographs and wondered how we would survive without their love and guidance.",
+
+"We were children. We did not understand inheritance, property or family disagreements. We only wanted our parents back.",
+
+"At first, relatives came with comforting words. They promised to stand with us. They said we would never be alone.",
+
+"But none of us knew that the hardest chapter of our lives was only beginning.",
+
+"We had lost our parents. We did not know that we would soon have to fight for the love, security and belonging we once took for granted.",
+
+"That was the day our childhood changed forever. The day we became orphans. The day our real struggle began.",
+
+"But even in our darkest moment, one thing remained. We still had each other. And our story was far from over."
+
+];
+
+let currentIndex = 0;
+let phase = "idle";
+let paused = false;
+let sequence = 0;
+let delayTimer = null;
+let waitingForVoices = false;
+
+function showSentence(text) {
+
+    narration.innerHTML = "";
+
+    const p = document.createElement("p");
+    p.textContent = text;
+
+    narration.appendChild(p);
+}
+
+function getAfricanVoice() {
+
+    const voices = speechSynthesis.getVoices();
+
+    const preferred = [
+        /en.ke/i,
+        /en.ng/i,
+        /en.za/i,
+        /en.gh/i
+    ];
+
+    for (const pattern of preferred) {
+
+        const voice = voices.find(v =>
+            pattern.test(v.lang)
+        );
+
+        if (voice) return voice;
+    }
+
+    return voices.find(v =>
+        /en.*female/i.test(v.name)
+    ) || voices.find(v =>
+        /en-GB/i.test(v.lang)
+    ) || voices.find(v =>
+        /^en/i.test(v.lang)
+    );
+}
+
+function readNext(mySequence) {
+
+    if (mySequence !== sequence ||
+        phase !== "narration" ||
+        paused) return;
+
+    if (currentIndex >= sentences.length) {
+
+        finishNarration(mySequence);
+        return;
+    }
+
+    const text = sentences[currentIndex];
+
+    showSentence(text);
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    const voice = getAfricanVoice();
+
+    if (voice) {
+        speech.voice = voice;
+        speech.lang = voice.lang;
+    } else {
+        speech.lang = "en-GB";
+    }
+
+    speech.rate = 0.84;
+    speech.pitch = 0.95;
+    speech.volume = 1;
+
+    speech.onend = function() {
+
+        if (mySequence !== sequence ||
+            phase !== "narration" ||
+            paused) return;
+
+        currentIndex++;
+
+        delayTimer = setTimeout(function() {
+            readNext(mySequence);
+        }, 700);
+    };
+
+    speech.onerror = function(event) {
+
+        if (mySequence !== sequence) return;
+
+        console.log("Narration error:", event.error);
+
+        phase = "error";
+
+        showSentence(
+            "Narration could not play. Please check your browser's speech voices and try again."
+        );
+    };
+
+    speechSynthesis.speak(speech);
+}
+
+function startNarration() {
+
+    const mySequence = sequence;
+
+    phase = "narration";
+    paused = false;
+
+    if (speechSynthesis.getVoices().length === 0) {
+
+        waitingForVoices = true;
+
+        showSentence("Preparing our story. Please wait...");
+
+        speechSynthesis.onvoiceschanged = function() {
+
+            if (waitingForVoices &&
+                mySequence === sequence &&
+                phase === "narration" &&
+                !paused) {
+
+                waitingForVoices = false;
+                readNext(mySequence);
+            }
+        };
+
+        setTimeout(function() {
+
+            if (waitingForVoices &&
+                mySequence === sequence &&
+                phase === "narration" &&
+                !paused) {
+
+                waitingForVoices = false;
+                readNext(mySequence);
+            }
+
+        }, 1500);
+
+    } else {
+
+        readNext(mySequence);
+    }
+}
+
+function playStory() {
+
+    if (phase === "narration" && paused) {
+
+        paused = false;
+        narration.style.opacity = "1";
+
+        if (waitingForVoices) return;
+
+        speechSynthesis.resume();
+
+        if (!speechSynthesis.speaking &&
+            !speechSynthesis.pending) {
+            readNext(sequence);
+        }
+
+        return;
+    }
+
+    if (phase === "song" && paused) {
+
+        paused = false;
+        narration.style.opacity = "1";
+
+        song.play().catch(error => {
+            console.log("Song playback error:", error);
+        });
+
+        return;
+    }
+
+    if (phase !== "idle") return;
+
+    startNarration();
+}
+
+function pauseStory() {
+
+    if (phase === "narration" && !paused) {
+
+        paused = true;
+        speechSynthesis.pause();
+        clearTimeout(delayTimer);
+
+        narration.style.opacity = "0.7";
+    }
+
+    else if (phase === "song" && !paused) {
+
+        paused = true;
+        song.pause();
+
+        narration.style.opacity = "0.7";
+    }
+}
+
+function finishNarration(mySequence) {
+
+    if (mySequence !== sequence) return;
+
+    waitingForVoices = false;
+    phase = "song";
+    paused = false;
+
+    showSentence(
+        "We thought the worst was over. But losing our parents was only the beginning. Now, let the song speak."
+    );
+
+    song.currentTime = 0;
+    song.volume = 1;
+
+    song.play().catch(error => {
+
+        console.log("Song playback error:", error);
+
+        showSentence(
+            "Our story continues. Please check that Umeniitika.mp3 is in the same folder."
+        );
+    });
+}
+
+function restartStory() {
+
+    sequence++;
+
+    clearTimeout(delayTimer);
+
+    waitingForVoices = false;
+    paused = false;
+    phase = "idle";
+    currentIndex = 0;
+
+    speechSynthesis.cancel();
+
+    song.pause();
+    song.currentTime = 0;
+
+    narration.style.opacity = "1";
+
+    showSentence("Starting Episode 1 again...");
+
+    startNarration();
+}
+
+song.addEventListener("ended", function() {
+
+    if (phase === "song") {
+
+        phase = "finished";
+
+        showSentence(
+            "We may have lost our parents, but we will never give up on our future. Our story continues..."
+        );
+    }
+});
+
+song.addEventListener("error", function() {
+
+    console.log("Check that Umeniitika.mp3 exists in your folder.");
+
+});
+
+</script>
+
+</body>
+</html>
